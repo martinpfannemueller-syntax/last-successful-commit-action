@@ -8484,9 +8484,13 @@ try {
       event: "push",
     })
     .then((res) => {
+      let workflow_runs = res.data.workflow_runs;
+      workflow_runs.sort(function (a, b) {
+        return new Date(b.updated_at) - new Date(a.updated_at);
+      });
       const lastSuccessCommitHash =
-        res.data.workflow_runs.length > 0
-          ? res.data.workflow_runs[0].head_commit.id
+        workflow_runs.length > 0
+          ? workflow_runs[0].head_commit.id
           : "";
       core.setOutput("commit_hash", lastSuccessCommitHash);
     })
